@@ -28,14 +28,14 @@ jobs:
     - name: Use Nerdbank.GitVersioning
       uses: dotnet/nbgv@master
       with:
-        setCommonVars: true
+        setAllVars: true
 
     - name: Print build number (2)
       run: echo "Build number is ${env:GITHUB_RUN_NUMBER}"
 
     - name: Print NB.GV Cloud Build Number
       run: echo "${env:NBGV_CloudBuildNumber}"
-      
+
     - name: Restore dependencies
       run: dotnet restore UselessPackage\UselessPackage.csproj
 
