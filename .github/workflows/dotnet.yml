@@ -23,15 +23,21 @@ jobs:
         dotnet-version: 3.1.404
 
     - name: Print build number (1)
-      run: echo "Build number is ${env:BUILD_NUMBER}"
+      run: echo "Build number is $GITHUB_RUN_NUMBER"
+
+    - name: Print build number (1)
+      run: echo "Build number is ${env:GITHUB_RUN_NUMBER}"
 
     - name: Use Nerdbank.GitVersioning
       uses: dotnet/nbgv@master
       with:
         setCommonVars: true
 
-    - name: Print build number (1)
-      run: echo "Build number is ${env:BUILD_NUMBER}"
+    - name: Print build number (2)
+      run: echo "Build number is $GITHUB_RUN_NUMBER"
+
+    - name: Print build number (2)
+      run: echo "Build number is ${env:GITHUB_RUN_NUMBER}"
 
     - name: Restore dependencies
       run: dotnet restore UselessPackage\UselessPackage.csproj
