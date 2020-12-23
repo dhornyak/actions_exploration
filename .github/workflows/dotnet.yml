@@ -31,7 +31,7 @@ jobs:
         setCommonVars: true
 
     - name: Print build number (1)
-       run: echo "Build number is ${env:BUILD_NUMBER}"
+      run: echo "Build number is ${env:BUILD_NUMBER}"
 
     - name: Restore dependencies
       run: dotnet restore UselessPackage\UselessPackage.csproj
