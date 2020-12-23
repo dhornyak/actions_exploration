@@ -21,9 +21,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.404
-        
-    - name: Print build number (1)
-      run: echo "Build number is ${env:GITHUB_RUN_NUMBER}"
 
     - name: Use Nerdbank.GitVersioning
       uses: dotnet/nbgv@master
@@ -35,6 +32,9 @@ jobs:
 
     - name: Print NB.GV Cloud Build Number
       run: echo "${env:NBGV_CloudBuildNumber}"
+
+    - name: Set GITHUB_RUN_NUMBER
+      run: echo "${env:NBGV_CloudBuildNumber}" >> ${env:GITHUB_RUN_NUMBER}
 
     - name: Restore dependencies
       run: dotnet restore UselessPackage\UselessPackage.csproj
