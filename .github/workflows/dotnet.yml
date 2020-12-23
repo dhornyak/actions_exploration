@@ -22,6 +22,12 @@ jobs:
       with:
         dotnet-version: 3.1.404
 
+    - name: Install tool Nerdbank.GitVersioning
+      run: dotnet tool install --tool-path .tools\nbgv nbgv
+
+    - name: Setting cloud build number
+      run: .tools\nbgv\nbgv cloud -c
+
     - name: Restore dependencies
       run: dotnet restore UselessPackage\UselessPackage.csproj
 
