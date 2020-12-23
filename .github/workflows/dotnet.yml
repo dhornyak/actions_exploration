@@ -2,7 +2,7 @@ name: .NET
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
 
@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 3.1.404
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore UselessPackage\UselessPackage.csproj
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build UselessPackage\UselessPackage.csproj --no-restore
     - name: Pack
-      run: dotnet pack
+      run: dotnet pack UselessPackage\UselessPackage.csproj
