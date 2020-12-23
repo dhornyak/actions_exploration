@@ -22,11 +22,16 @@ jobs:
       with:
         dotnet-version: 3.1.404
 
-    - name: Install tool Nerdbank.GitVersioning
-      run: dotnet tool install --tool-path .tools\nbgv nbgv
+    - name: Print build number (1)
+      run: echo "Build number is ${env:BUILD_NUMBER}"
 
-    - name: Setting cloud build number
-      run: .tools\nbgv\nbgv cloud -c
+    - name: Use Nerdbank.GitVersioning
+      uses: dotnet/nbgv@master
+      with:
+        setCommonVars: true
+
+    - name: Print build number (1)
+       run: echo "Build number is ${env:BUILD_NUMBER}"
 
     - name: Restore dependencies
       run: dotnet restore UselessPackage\UselessPackage.csproj
