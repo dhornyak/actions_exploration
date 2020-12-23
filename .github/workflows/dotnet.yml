@@ -30,9 +30,3 @@ jobs:
 
     - name: Pack
       run: dotnet pack UselessPackage\UselessPackage.csproj
-
-    - name: Set build number
-      uses: dotnet/nbgv@v0.4
-      with:
-        setCommonVars: true
-      run: cloud
