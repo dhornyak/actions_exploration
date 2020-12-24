@@ -76,3 +76,51 @@ jobs:
 
       - name: Display structure of downloaded files
         run: ls -R
+
+      - name: Get name of NuGet package
+        run: |
+          NUPKG_ARTIFACT_PATHNAME=$(ls packages/*.nupkg | head -n 1)
+          NUPKG_ARTIFACT_NAME=$(basename $NUPKG_ARTIFACT_PATHNAME)
+          echo ::set-env name=NUPKG_ARTIFACT_NAME::${NUPKG_ARTIFACT_NAME}
+          echo ::set-env name=NUPKG_ARTIFACT_PATHNAME::${NUPKG_ARTIFACT_PATHNAME}
+
+      - name: Get name of symbol package
+        run: |
+          SNUPKG_ARTIFACT_PATHNAME=$(ls packages/*.snupkg | head -n 1)
+          SNUPKG_ARTIFACT_NAME=$(basename $SNUPKG_ARTIFACT_PATHNAME)
+          echo ::set-env name=SNUPKG_ARTIFACT_NAME::${SNUPKG_ARTIFACT_NAME}
+          echo ::set-env name=SNUPKG_ARTIFACT_PATHNAME::${SNUPKG_ARTIFACT_PATHNAME}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Yet another release of this complete useless project.
+
+            Changes in this release:
+            - Absolute nothing
+          draft: true
+          prerelease: false
+
+      - name: Upload NuGet package release asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.NUPKG_ARTIFACT_PATHNAME }}
+          asset_name: ${{ env.NUPKG_ARTIFACT_NAME }}
+
+      - name: Upload symbol package release asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.SNUPKG_ARTIFACT_PATHNAME }}
+          asset_name: ${{ env.SNUPKG_ARTIFACT_NAME }}
