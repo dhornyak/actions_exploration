@@ -12,3 +12,4 @@ jobs:
 
     steps:
       - run: echo "Tag pushed!"
+      - run: echo "Second step..."
