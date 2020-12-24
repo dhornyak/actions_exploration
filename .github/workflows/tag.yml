@@ -78,18 +78,20 @@ jobs:
         run: ls -R
 
       - name: Get name of NuGet package
+        id: extract_nupkg_path
         run: |
           NUPKG_ARTIFACT_PATHNAME=$(find . -name '*.nupkg' | head -n 1)
           NUPKG_ARTIFACT_NAME=$(basename $NUPKG_ARTIFACT_PATHNAME)
-          echo ::set-env name=NUPKG_ARTIFACT_NAME::${NUPKG_ARTIFACT_NAME}
-          echo ::set-env name=NUPKG_ARTIFACT_PATHNAME::${NUPKG_ARTIFACT_PATHNAME}
+          echo ::set-output name=NUPKG_ARTIFACT_NAME::${NUPKG_ARTIFACT_NAME}
+          echo ::set-output name=NUPKG_ARTIFACT_PATHNAME::${NUPKG_ARTIFACT_PATHNAME}
 
       - name: Get name of symbol package
+        id: extract_snupkg_path
         run: |
           SNUPKG_ARTIFACT_PATHNAME=$(find . -name '*.snupkg' | head -n 1)
           SNUPKG_ARTIFACT_NAME=$(basename $SNUPKG_ARTIFACT_PATHNAME)
-          echo ::set-env name=SNUPKG_ARTIFACT_NAME::${SNUPKG_ARTIFACT_NAME}
-          echo ::set-env name=SNUPKG_ARTIFACT_PATHNAME::${SNUPKG_ARTIFACT_PATHNAME}
+          echo ::set-output name=SNUPKG_ARTIFACT_NAME::${SNUPKG_ARTIFACT_NAME}
+          echo ::set-output name=SNUPKG_ARTIFACT_PATHNAME::${SNUPKG_ARTIFACT_PATHNAME}
 
       - name: Create Release
         id: create_release
@@ -113,8 +115,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.NUPKG_ARTIFACT_PATHNAME }}
-          asset_name: ${{ env.NUPKG_ARTIFACT_NAME }}
+          asset_path: ${{steps.extract_nupkg_path.outputs.NUPKG_ARTIFACT_NAME}}
+          asset_name: ${{steps.extract_nupkg_path.outputs.NUPKG_ARTIFACT_PATHNAME}}
 
       - name: Upload symbol package release asset
         uses: actions/upload-release-asset@v1.0.2
@@ -122,5 +124,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.SNUPKG_ARTIFACT_PATHNAME }}
-          asset_name: ${{ env.SNUPKG_ARTIFACT_NAME }}
+          asset_path: ${{steps.extract_snupkg_path.outputs.SNUPKG_ARTIFACT_NAME}}
+          asset_name: ${{steps.extract_snupkg_path.outputs.SNUPKG_ARTIFACT_PATHNAME}}
