@@ -39,7 +39,7 @@ jobs:
           name: Packages
           path: |
             UselessPackage\bin\**\*.nupkg
-            UselessPacakge\bin\**\*.snupkg
+            UselessPackage\bin\**\*.snupkg
           if-no-files-found: error
           retention-days: 5
   
