@@ -79,14 +79,14 @@ jobs:
 
       - name: Get name of NuGet package
         run: |
-          NUPKG_ARTIFACT_PATHNAME=$(ls packages/*.nupkg | head -n 1)
+          NUPKG_ARTIFACT_PATHNAME=$(find . -name '*.nupkg' | head -n 1)
           NUPKG_ARTIFACT_NAME=$(basename $NUPKG_ARTIFACT_PATHNAME)
           echo ::set-env name=NUPKG_ARTIFACT_NAME::${NUPKG_ARTIFACT_NAME}
           echo ::set-env name=NUPKG_ARTIFACT_PATHNAME::${NUPKG_ARTIFACT_PATHNAME}
 
       - name: Get name of symbol package
         run: |
-          SNUPKG_ARTIFACT_PATHNAME=$(ls packages/*.snupkg | head -n 1)
+          SNUPKG_ARTIFACT_PATHNAME=$(find . -name '*.snupkg' | head -n 1)
           SNUPKG_ARTIFACT_NAME=$(basename $SNUPKG_ARTIFACT_PATHNAME)
           echo ::set-env name=SNUPKG_ARTIFACT_NAME::${SNUPKG_ARTIFACT_NAME}
           echo ::set-env name=SNUPKG_ARTIFACT_PATHNAME::${SNUPKG_ARTIFACT_PATHNAME}
