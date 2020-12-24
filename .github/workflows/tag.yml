@@ -1,0 +1,14 @@
+name: Release on tag pushed
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+      - run: echo "Tag pushed!"
