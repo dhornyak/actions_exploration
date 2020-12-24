@@ -1,0 +1,39 @@
+name: Manual build
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.404
+
+    - name: Use Nerdbank.GitVersioning
+      uses: dotnet/nbgv@master
+      with:
+        setAllVars: true
+        
+    - name: Restore dependencies
+      run: dotnet restore UselessPackage\UselessPackage.csproj
+
+    - name: Build
+      run: dotnet build UselessPackage\UselessPackage.csproj --no-restore
+
+    - name: Pack
+      run: dotnet pack UselessPackage\UselessPackage.csproj
