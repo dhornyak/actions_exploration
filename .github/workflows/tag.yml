@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Print GITHUB_REF
-        run: echo "${GITHUB_REF}"
+        run: echo ${{github.ref}}
 
       - name: Checkout source
         uses: actions/checkout@v2
