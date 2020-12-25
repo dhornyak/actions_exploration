@@ -8,8 +8,10 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    if: startsWith(${GITHUB_REF#refs/heads/}, 'release/')
     steps:
+      - name: Print GITHUB_REF
+        run: echo "$GITHUB_REF"
+        
       - name: Checkout source
         uses: actions/checkout@v2
         with:
