@@ -2,14 +2,13 @@ name: Release on tag pushed
 
 on:
   push:
-    branches:
-      - 'release/*'
     tags:
       - 'v*'
 
 jobs:
   build:
     runs-on: windows-latest
+    if: startsWith(github.event.base_ref, 'refs/heads/release/')
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
