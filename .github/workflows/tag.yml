@@ -7,8 +7,124 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
-
     steps:
-      - run: echo "Tag pushed!"
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.404
+
+      - name: Use Nerdbank.GitVersioning
+        uses: dotnet/nbgv@master
+        with:
+          setAllVars: true
+
+      - name: Restore dependencies
+        run: dotnet restore UselessPackage\UselessPackage.csproj
+
+      - name: Build
+        run: dotnet build UselessPackage\UselessPackage.csproj --no-restore
+
+      - name: Pack
+        run: dotnet pack UselessPackage\UselessPackage.csproj
+
+      - name: 'Upload Artifacts'
+        uses: actions/upload-artifact@v2
+        with:
+          name: Packages
+          path: |
+            UselessPackage\bin\**\*.nupkg
+            UselessPackage\bin\**\*.snupkg
+          if-no-files-found: error
+          retention-days: 5
+  
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract source, branch and tag name
+        id: extract_name
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+
+      - name: Print source, branch and tag name
+        run: |
+          echo "source: $SOURCE_NAME"
+          echo "branch: $SOURCE_BRANCH"
+          echo "tag: $SOURCE_TAG"
+        env:
+          SOURCE_NAME: ${{ steps.extract_name.outputs.SOURCE_NAME }}
+          SOURCE_BRANCH: ${{ steps.extract_name.outputs.SOURCE_BRANCH }}
+          SOURCE_TAG: ${{ steps.extract_name.outputs.SOURCE_TAG }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        id: download
+        with:
+          name: Packages
+          path: packages
+
+      - name: Echo download path
+        run: echo ${{steps.download.outputs.download-path}}
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      - name: Get name of NuGet package
+        id: extract_nupkg_path
+        run: |
+          NUPKG_ARTIFACT_PATHNAME=$(find . -name '*.nupkg' | head -n 1)
+          NUPKG_ARTIFACT_NAME=$(basename $NUPKG_ARTIFACT_PATHNAME)
+          echo ::set-output name=NUPKG_ARTIFACT_NAME::${NUPKG_ARTIFACT_NAME}
+          echo ::set-output name=NUPKG_ARTIFACT_PATHNAME::${NUPKG_ARTIFACT_PATHNAME}
+
+      - name: Get name of symbol package
+        id: extract_snupkg_path
+        run: |
+          SNUPKG_ARTIFACT_PATHNAME=$(find . -name '*.snupkg' | head -n 1)
+          SNUPKG_ARTIFACT_NAME=$(basename $SNUPKG_ARTIFACT_PATHNAME)
+          echo ::set-output name=SNUPKG_ARTIFACT_NAME::${SNUPKG_ARTIFACT_NAME}
+          echo ::set-output name=SNUPKG_ARTIFACT_PATHNAME::${SNUPKG_ARTIFACT_PATHNAME}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Yet another release of this complete useless project.
+
+            Changes in this release:
+            - Absolute nothing
+          draft: true
+          prerelease: false
+
+      - name: Upload NuGet package release asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{steps.extract_nupkg_path.outputs.NUPKG_ARTIFACT_PATHNAME}}
+          asset_name: ${{steps.extract_nupkg_path.outputs.NUPKG_ARTIFACT_NAME}}
+          asset_content_type: application/octet-stream
+
+      - name: Upload symbol package release asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{steps.extract_snupkg_path.outputs.SNUPKG_ARTIFACT_PATHNAME}}
+          asset_name: ${{steps.extract_snupkg_path.outputs.SNUPKG_ARTIFACT_NAME}}
+          asset_content_type: application/octet-stream
