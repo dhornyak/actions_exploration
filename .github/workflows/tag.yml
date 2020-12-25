@@ -3,7 +3,7 @@ name: Release on tag pushed
 on:
   push:
     tags:
-      - '*'
+      - 'v*'
 
 jobs:
   build:
@@ -46,7 +46,15 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    steps:
+    steps:    
+      - name: Print GITHUB_REF
+        run: echo ${{ github.ref }}
+
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+        
       - name: Extract source, branch and tag name
         id: extract_name
         run: |
