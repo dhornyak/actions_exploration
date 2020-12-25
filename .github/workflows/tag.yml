@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    if: startsWith(GITHUB_REF#refs/heads/, 'release/')
+    if: startsWith(${GITHUB_REF#refs/heads/}, 'release/')
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
