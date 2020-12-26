@@ -26,6 +26,8 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo});
 
+            console.log(releases);
+            
             console.log("Releases:");
             console.log("");
 
