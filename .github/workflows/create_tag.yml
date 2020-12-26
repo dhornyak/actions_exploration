@@ -9,6 +9,11 @@ jobs:
   create:
     runs-on: ubuntu-latest
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
       - name: Checkout source
         uses: actions/checkout@v2
         with:
@@ -26,6 +31,12 @@ jobs:
       - name: Print tag number
         run: echo ${{ steps.tag_number.outputs.VERSION }}
         
-      # Compute tag name
-      # Create tag on commit
-      # Remove vNext
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            await github.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: github.ref
+            });
