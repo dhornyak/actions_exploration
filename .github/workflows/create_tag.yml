@@ -8,6 +8,8 @@ on:
 jobs:
   create:
     runs-on: ubuntu-latest
+    outputs:
+      tag_number_output: ${{ steps.tag_number.outputs.VERSION }}
     steps:
       - name: Dump GitHub context
         env:
@@ -30,13 +32,10 @@ jobs:
 
       - name: Print tag number
         run: echo ${{ steps.tag_number.outputs.VERSION }}
-        
-      - uses: actions/github-script@v3
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            await github.git.deleteRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'tags%2FvNext'
-            });
+
+  validate:
+    needs: create
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print tag name calcualted in previous job
+        run: echo ${{ needs.create.outputs.tag_number_output }}
