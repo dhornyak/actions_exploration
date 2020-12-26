@@ -38,5 +38,5 @@ jobs:
             await github.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'tags//vNext'
+              ref: 'tags%2FvNext'
             });
