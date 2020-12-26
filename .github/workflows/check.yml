@@ -29,7 +29,9 @@ jobs:
             console.log("Releases:");
             console.log("");
 
-            for (const release of releases) {
+            for(var i = 0; i < releases.length; i++) {
+              var release = releases[i];
+
               console.log(release.name);
               console.log(release.target_commitish);
               console.log("");
