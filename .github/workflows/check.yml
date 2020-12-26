@@ -19,23 +19,31 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            console.log("Current sha");
+            console.log("Context sha:");
             console.log(context.sha);
+            console.log("");
 
-            const releases = await github.repos.listReleases({
+            const getReleases = await github.repos.listReleases({
               owner: context.repo.owner,
               repo: context.repo.repo});
 
-            console.log(releases);
+            if (getReleases.status != 200)
+              throw "Could not query releases.";
 
-            console.log("Releases:");
-            console.log("");
+            const releases = getReleases.data;
 
-            for(var i = 0; i < releases.data.length; i++) {
-              var release = releases.data[i];
+            console.log("Previous releases:");
 
-              console.log(release.name);
-              console.log(release.tag_name);
-              console.log(release.target_commitish);
+            for(var i = 0; i < releases.length; i++) {
+              var release = releases[i];
+
+              console.log("  - " + release.name);
+              console.log("    tag: " + release.tag_name);
+              console.log("    sha: " + release.target_commitish);
               console.log("");
             }
+
+            if (releases.some((r) => r.target_commitish == context.target_commitish))
+              throw "Release already exists for the currect commit."
+
+            console.log("No release found for the current commit. Continue...");
