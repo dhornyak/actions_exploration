@@ -36,15 +36,19 @@ jobs:
               throw "Could not query branches where current commit is head.";
 
             const branchesWhereHead = getBranchesWhereHead.data;
-            console.log(branchesWhereHead.length);
-            console.log("Branches:");
+            
+            console.log("Branches where current commit is head:");
 
             for(var i = 0; i < branchesWhereHead.length; i++) {
               var brach = branchesWhereHead[i];
-
               console.log("  - " + brach.name);
               console.log("");
             }
+
+            if (branchesWhereHead.every((b) => !b.name.startsWith('release/')))
+              throw "No release/ branch found where current commit is head."
+
+            console.log("Found a release/ branch where current commit is head. Continue...");
 
       - name: Ensure commit has not been released before
         uses: actions/github-script@v3
@@ -68,7 +72,6 @@ jobs:
 
             for(var i = 0; i < releases.length; i++) {
               var release = releases[i];
-
               console.log("  - " + release.name);
               console.log("    tag: " + release.tag_name);
               console.log("    sha: " + release.target_commitish);
