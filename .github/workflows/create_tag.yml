@@ -19,6 +19,13 @@ jobs:
         with:
           setAllVars: true
 
+      - name: Calculate tag number
+        id: tag_number
+        run: echo ::set-output name=VERSION::v${NBGV_SemVer2}
+
+      - name: Print tag number
+        run: echo ${{ steps.tag_number.outputs.VERSION }}
+        
       # Compute tag name
       # Create tag on commit
       # Remove vNext
