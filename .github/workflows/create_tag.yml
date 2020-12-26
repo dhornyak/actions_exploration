@@ -35,7 +35,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            await github.deleteRef({
+            await github.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: github.ref
