@@ -36,10 +36,11 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             console.log(github);
-            console.log(context);
+            console.log("context.ref:");
+            console.log(context.ref);
 
             await github.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'refs/tags/vNext'
+              ref: 'refs/tags/vNext'
             });
