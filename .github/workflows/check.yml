@@ -43,7 +43,7 @@ jobs:
               console.log("");
             }
 
-            if (releases.some((r) => r.target_commitish == context.target_commitish))
+            if (releases.some((r) => r.target_commitish == context.sha))
               throw "Release already exists for the currect commit."
 
             console.log("No release found for the current commit. Continue...");
