@@ -14,6 +14,42 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
+      - name: Ensure ref is head of a release branch
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            console.log("Context sha:");
+            console.log(context.sha);
+            console.log("");
+
+            const getBranchesWhereHead = await github.request("GET /repos/{owner}/{repo}/commits/{sha}/branches-where-head", {
+              headers: {
+                accept: 'application/vnd.github.groot-preview+json'
+              },
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha
+            });
+
+            if (getBranchesWhereHead.status != 200)
+              throw "Could not query branches where current commit is head.";
+
+            const branchesWhereHead = getBranchesWhereHead.data;
+            
+            console.log("Branches where current commit is head:");
+
+            for(var i = 0; i < branchesWhereHead.length; i++) {
+              var brach = branchesWhereHead[i];
+              console.log("  - " + brach.name);
+              console.log("");
+            }
+
+            if (branchesWhereHead.every((b) => !b.name.startsWith('release/')))
+              throw "No release/ branch found where current commit is head."
+
+            console.log("Found a release/ branch where current commit is head. Continue...");
+
       - name: Ensure commit has not been released before
         uses: actions/github-script@v3
         with:
@@ -36,14 +72,13 @@ jobs:
 
             for(var i = 0; i < releases.length; i++) {
               var release = releases[i];
-
               console.log("  - " + release.name);
               console.log("    tag: " + release.tag_name);
               console.log("    sha: " + release.target_commitish);
               console.log("");
             }
 
-            if (releases.some((r) => r.target_commitish == context.target_commitish))
+            if (releases.some((r) => r.target_commitish == context.sha))
               throw "Release already exists for the currect commit."
 
             console.log("No release found for the current commit. Continue...");
