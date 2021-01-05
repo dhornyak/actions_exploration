@@ -1,0 +1,16 @@
+name: 01 Print variables
+
+on:
+  workflow_dispatch:
+  inputs:
+      parameter:
+        description: 'Parameter'     
+        required: false
+        default: 'optional'
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hello, World!
+        run: echo 'Hello, World!'
