@@ -2,7 +2,7 @@ name: 01 Print variables
 
 on:
   workflow_dispatch:
-  inputs:
+    inputs:
       parameter:
         description: 'Parameter'     
         required: false
