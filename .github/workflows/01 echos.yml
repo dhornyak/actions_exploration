@@ -52,7 +52,7 @@ jobs:
           LOCAL_VARIABLE=$(echo ${{ github.ref }})
           echo ::set-output name=OUTPUT_LOCAL::${LOCAL_VARIABLE}
           echo ::set-output name=OUTPUT_ENVIRONMENT::${REF}
-          echo ::set-output name=OUTPUT_STEP::${steps.compute.outputs.result}
+          echo ::set-output name=OUTPUT_STEP::${{ steps.compute.outputs.result }}
         env:
           REF: ${{ github.ref }}
 
