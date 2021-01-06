@@ -28,11 +28,11 @@ jobs:
       - name: Print dependent job's output parameter
         run: echo ${{ needs.prepare.outputs.computed }}
 
-      - name: Set output parameter for the step
+      - name: Set output parameter for the 'compute' step
         id: compute
         run: echo ::set-output name=result::This is the result of the step 'compute', stored as an output parameter
 
-      - name: Print previous step's output parameter
+      - name: Print 'compute' step's output parameter
         run: echo ${{ steps.compute.outputs.result }}
 
       - name: Print workflow input parameter
@@ -72,11 +72,11 @@ jobs:
       - name: Print dependent job's output parameter
         run: echo "${{ needs.prepare.outputs.computed }}"
 
-      - name: Set output parameter for the step
+      - name: Set output parameter for the 'compute' step
         id: compute
         run: echo "::set-output name=result::This is the result of the step 'compute', stored as an output parameter"
 
-      - name: Print previous step's output parameter
+      - name: Print 'compute' step's output parameter
         run: echo "${{ steps.compute.outputs.result }}"
 
       - name: Print workflow input parameter
@@ -89,3 +89,19 @@ jobs:
       
       - name: Print part of the github context (github.ref)
         run: echo ${{ github.ref }}
+
+      - name: Set output parameter filled with other parameters
+        id: step_with_output_parameters
+        run: |
+          LOCAL_VARIABLE=$(echo ${{ github.ref }})
+          echo ::set-output name=OUTPUT_LOCAL::${LOCAL_VARIABLE}
+          echo ::set-output name=OUTPUT_ENVIRONMENT::${Env:REF}
+          echo ::set-output name=OUTPUT_STEP::${{ steps.compute.outputs.result }}
+        env:
+          REF: ${{ github.ref }}
+
+      - name: Print previous step's output parameter
+        run: |
+          echo ${{ steps.step_with_output_parameters.outputs.OUTPUT_LOCAL }}
+          echo ${{ steps.step_with_output_parameters.outputs.OUTPUT_ENVIRONMENT }}
+          echo ${{ steps.step_with_output_parameters.outputs.OUTPUT_STEP }}
