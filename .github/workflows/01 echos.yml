@@ -94,8 +94,7 @@ jobs:
         id: step_with_output_parameters
         run: |
           set LOCAL_VARIABLE=${{ github.ref }}
-          echo "%LOCAL_VARIABLE%"
-          echo "::set-output name=OUTPUT_LOCAL::$(echo %LOCAL_VARIABLE%)"
+          echo "::set-output name=OUTPUT_LOCAL::${env:LOCAL_VARIABLE}"
           echo "::set-output name=OUTPUT_ENVIRONMENT::${env:REF}"
           echo "::set-output name=OUTPUT_STEP::${{ steps.compute.outputs.result }}"
         env:
