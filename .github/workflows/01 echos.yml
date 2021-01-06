@@ -81,3 +81,11 @@ jobs:
 
       - name: Print workflow input parameter
         run: echo "${{ github.event.inputs.parameter }}"
+
+      - name: Print GitHub context parsed in an environment variable
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "${Env:GITHUB_CONTEXT}"
+      
+      - name: Print part of the github context (github.ref)
+        run: echo ${{ github.ref }}
