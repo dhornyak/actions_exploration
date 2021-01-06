@@ -32,4 +32,4 @@ jobs:
     needs: prepare
     steps:
       - name: Print dependent job's output
-        run: echo ${{ needs.prepare.outputs.computed }}
+        run: echo "${{ needs.prepare.outputs.computed }}"
