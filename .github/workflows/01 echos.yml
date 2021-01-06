@@ -47,7 +47,7 @@ jobs:
 
       - name: Set output parameter for the step
         id: compute
-        run: echo ::set-output name=result::This is the result of the step 'compute', stored as an output parameter
+        run: echo "::set-output name=result::This is the result of the step 'compute', stored as an output parameter"
 
       - name: Print previous step's output variable
         run: echo "${{ steps.compute.outputs.result }}"
