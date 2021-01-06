@@ -35,6 +35,9 @@ jobs:
       - name: Print previous step's output variable
         run: echo ${{ steps.compute.outputs.result }}
 
+      - name: Print workflow input parameter
+        run: echo ${{ github.event.inputs.parameter }}
+
   windows:
     runs-on: windows-latest
     needs: prepare
@@ -51,3 +54,6 @@ jobs:
 
       - name: Print previous step's output variable
         run: echo "${{ steps.compute.outputs.result }}"
+
+      - name: Print workflow input parameter
+        run: echo "${{ github.event.inputs.parameter }}"
