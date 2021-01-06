@@ -1,0 +1,41 @@
+name: Create tag for vNext
+
+on:
+  push:
+    tags:
+      - 'vNext'
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    outputs:
+      tag_number_output: ${{ steps.tag_number.outputs.VERSION }}
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use Nerdbank.GitVersioning
+        uses: dotnet/nbgv@master
+        with:
+          setAllVars: true
+
+      - name: Calculate tag number
+        id: tag_number
+        run: echo ::set-output name=VERSION::v${NBGV_SemVer2}
+
+      - name: Print tag number
+        run: echo ${{ steps.tag_number.outputs.VERSION }}
+
+  validate:
+    needs: create
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print tag name calcualted in previous job
+        run: echo ${{ needs.create.outputs.tag_number_output }}
