@@ -85,7 +85,7 @@ jobs:
       - name: Print GitHub context parsed in an environment variable
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "${Env:GITHUB_CONTEXT}"
+        run: echo "${env:GITHUB_CONTEXT}"
       
       - name: Print part of the github context (github.ref)
         run: echo ${{ github.ref }}
@@ -93,10 +93,10 @@ jobs:
       - name: Set output parameter filled with other parameters
         id: step_with_output_parameters
         run: |
-          LOCAL_VARIABLE=$(echo ${{ github.ref }})
-          echo ::set-output name=OUTPUT_LOCAL::${LOCAL_VARIABLE}
-          echo ::set-output name=OUTPUT_ENVIRONMENT::${Env:REF}
-          echo ::set-output name=OUTPUT_STEP::${{ steps.compute.outputs.result }}
+          set LOCAL_VARIABLE=%GITHUB_REF%
+          echo "::set-output name=OUTPUT_LOCAL::%LOCAL_VARIABLE%"
+          echo "::set-output name=OUTPUT_ENVIRONMENT::${env:REF}"
+          echo "::set-output name=OUTPUT_STEP::${{ steps.compute.outputs.result }}"
         env:
           REF: ${{ github.ref }}
 
