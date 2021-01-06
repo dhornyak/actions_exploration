@@ -28,6 +28,13 @@ jobs:
       - name: Print dependent job's output variable
         run: echo ${{ needs.prepare.outputs.computed }}
 
+      - name: Set output parameter for the step
+        id: compute
+        run: echo ::set-output name=result::This is the result of the step 'compute', stored as an output parameter
+
+      - name: Print previous step's output variable
+        run: echo ${{ steps.compute.outputs.result }}
+
   windows:
     runs-on: windows-latest
     needs: prepare
@@ -37,3 +44,10 @@ jobs:
 
       - name: Print dependent job's output
         run: echo "${{ needs.prepare.outputs.computed }}"
+
+      - name: Set output parameter for the step
+        id: compute
+        run: echo ::set-output name=result::This is the result of the step 'compute', stored as an output parameter
+
+      - name: Print previous step's output variable
+        run: echo "${{ steps.compute.outputs.result }}"
