@@ -99,8 +99,6 @@ jobs:
       - name: Set output parameter filled with other parameters
         id: step_with_output_parameters
         run: |
-          set LOCAL_VARIABLE=${{ github.ref }}
-          echo "::set-output name=OUTPUT_LOCAL::%LOCAL_VARIABLE%"
           echo "::set-output name=OUTPUT_ENVIRONMENT::${env:REF}"
           echo "::set-output name=OUTPUT_STEP::${{ steps.compute.outputs.result }}"
         env:
@@ -108,6 +106,5 @@ jobs:
 
       - name: Print previous step's output parameter
         run: |
-          echo "${{ steps.step_with_output_parameters.outputs.OUTPUT_LOCAL }}"
           echo "${{ steps.step_with_output_parameters.outputs.OUTPUT_ENVIRONMENT }}"
           echo "${{ steps.step_with_output_parameters.outputs.OUTPUT_STEP }}"
