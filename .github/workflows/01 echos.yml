@@ -41,11 +41,11 @@ jobs:
       - name: Print GitHub context parsed in an environment variable
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo $GITHUB_CONTEXT
-
-      - run: echo ${{ github }}
-      - run: echo ${{ github.ref }}
+        run: echo "$GITHUB_CONTEXT"
       
+      - name: Print part of the github context (github.ref)
+      - run: echo ${{ github.ref }}
+
       # print part of context
       # set output variable with environment/other steps output in it
         # print this
