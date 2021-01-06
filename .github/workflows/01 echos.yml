@@ -44,7 +44,7 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
       
       - name: Print part of the github context (github.ref)
-      - run: echo ${{ github.ref }}
+        run: echo ${{ github.ref }}
 
       # print part of context
       # set output variable with environment/other steps output in it
