@@ -35,5 +35,8 @@ jobs:
     - name: Pack
       run: dotnet pack ./src/UselessPackage/UselessPackage.csproj
 
+    - name: Push
+      run: dotnet nuget push ./src/UselessPackage/bin/Debug/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate --no-symbols false
+
     - name: Display structure of working directory
       run: ls -R
