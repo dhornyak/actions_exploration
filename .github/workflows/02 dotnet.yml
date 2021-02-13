@@ -1,4 +1,4 @@
-name: 01 dotnet CLI
+name: 02 dotnet CLI
 
 on: workflow_dispatch
 
