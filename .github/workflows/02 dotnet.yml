@@ -23,17 +23,17 @@ jobs:
       with:
         setAllVars: true
 
-    - name: Display structure of working directory
-      run: ls -R
-
     - name: Restore dependencies
       run: dotnet restore ./src/UselessPackage/UselessPackage.csproj
 
     - name: Build
-      run: dotnet build src\UselessPackage\UselessPackage.csproj --no-restore
+      run: dotnet build ./src/UselessPackage/UselessPackage.csproj --no-restore
 
     - name: Test
-      run: dotnet test test\UselessPackage.Test\UselessPackage.Test.csproj
+      run: dotnet test ./test/UselessPackage.Test/UselessPackage.Test.csproj
 
     - name: Pack
-      run: dotnet pack UselessPackage\UselessPackage.csproj
+      run: dotnet pack ./src/UselessPackage/UselessPackage.csproj
+
+    - name: Display structure of working directory
+      run: ls -R
