@@ -33,7 +33,7 @@ jobs:
       run: dotnet test ./test/UselessPackage.Test/UselessPackage.Test.csproj
 
     - name: Pack
-      run: dotnet pack ./src/UselessPackage/UselessPackage.csproj
+      run: dotnet pack ./src/UselessPackage/UselessPackage.csproj -p:RepositoryUrl=https://github.com/dhornyak/actions_exploration
 
     - name: Push
       run: dotnet nuget push ./src/UselessPackage/bin/Debug/*.nupkg --source https://nuget.pkg.github.com/dhornyak/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
