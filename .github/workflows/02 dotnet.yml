@@ -39,7 +39,7 @@ jobs:
       run: dotnet pack ./src/UselessPackage/UselessPackage.csproj
 
     - name: Push
-      run: dotnet nuget push ./src/UselessPackage/bin/Debug/*.nupkg --skip-duplicate
+      run: dotnet nuget push ./src/UselessPackage/bin/Debug/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
 
     - name: Display structure of working directory
       run: ls -R
