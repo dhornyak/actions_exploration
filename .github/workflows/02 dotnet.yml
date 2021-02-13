@@ -34,4 +34,3 @@ jobs:
 
     - name: Pack
       run: dotnet pack UselessPackage\UselessPackage.csproj
-ackage.csproj
