@@ -1,20 +1,11 @@
-name: .NET
+name: 01 dotnet CLI
 
-on:
-  push:
-    branches: 
-      - main
-      - develop
-      - 'release/**' 
-      - 'feature/**'
-  pull_request:
-    branches: 
-      - main
+on: workflow_dispatch
 
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout source
@@ -25,7 +16,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.404
+        dotnet-version: 5.0.1
 
     - name: Use Nerdbank.GitVersioning
       uses: dotnet/nbgv@master
@@ -33,10 +24,14 @@ jobs:
         setAllVars: true
         
     - name: Restore dependencies
-      run: dotnet restore UselessPackage\UselessPackage.csproj
+      run: dotnet restore src\UselessPackage\UselessPackage.csproj
 
     - name: Build
-      run: dotnet build UselessPackage\UselessPackage.csproj --no-restore
+      run: dotnet build src\UselessPackage\UselessPackage.csproj --no-restore
+
+    - name: Test
+      run: dotnet test test\UselessPackage.Test\UselessPackage.Test.csproj
 
     - name: Pack
       run: dotnet pack UselessPackage\UselessPackage.csproj
+ackage.csproj
