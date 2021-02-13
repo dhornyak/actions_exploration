@@ -11,6 +11,7 @@
     <PackageTags>useless;development</PackageTags>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <RepositoryUrl>https://github.com/dhornyak/actions_exploration</RepositoryUrl>
   </PropertyGroup>
 
 </Project>
