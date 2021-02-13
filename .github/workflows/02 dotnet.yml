@@ -27,7 +27,7 @@ jobs:
       run: ls -R
 
     - name: Restore dependencies
-      run: dotnet restore .\src\UselessPackage\UselessPackage.csproj
+      run: dotnet restore ./src/UselessPackage/UselessPackage.csproj
 
     - name: Build
       run: dotnet build src\UselessPackage\UselessPackage.csproj --no-restore
