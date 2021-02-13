@@ -17,6 +17,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.100
+        source-url: https://nuget.pkg.github.com/dhornyak/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}} 
 
     - name: Use Nerdbank.GitVersioning
       uses: dotnet/nbgv@master
@@ -36,7 +39,7 @@ jobs:
       run: dotnet pack ./src/UselessPackage/UselessPackage.csproj
 
     - name: Push
-      run: dotnet nuget push ./src/UselessPackage/bin/Debug/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate --no-symbols false
+      run: dotnet nuget push ./src/UselessPackage/bin/Debug/*.nupkg --skip-duplicate
 
     - name: Display structure of working directory
       run: ls -R
