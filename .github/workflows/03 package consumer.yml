@@ -22,3 +22,21 @@ jobs:
       uses: dotnet/nbgv@master
       with:
         setAllVars: true
+
+    - name: List NuGet sources (1)
+      run: dotnet nuget list source
+
+    - name: Add NuGet source
+      run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --name github_dhornyak https://nuget.pkg.github.com/dhornyak/index.json
+
+    - name: List NuGet sources (2)
+      run: dotnet nuget list source
+
+    - name: Restore
+      run: dotnet restore ./src/UselessConsumer/UselessConsumer.csproj
+
+    - name: Build
+      run: dotnet build ./src/UselessConsumer/UselessConsumer.csproj --configuration Release --no-restore
+
+    - name: Run
+      run: dotnet run --project ./src/UselessConsumer --no-build
