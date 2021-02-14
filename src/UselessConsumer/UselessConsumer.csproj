@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-  	<PackageReference Include="DHO.UselessPackage" Version="1.3.44-beta-gaf91ea2b14" />
+  	<PackageReference Include="DHO.UselessPackage" Version="1.3.44-beta" />
   </ItemGroup>
 
 </Project>
