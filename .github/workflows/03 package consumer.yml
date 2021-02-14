@@ -36,4 +36,4 @@ jobs:
       run: dotnet build ./src/UselessConsumer/UselessConsumer.csproj --configuration Release --no-restore
 
     - name: Run
-      run: dotnet run --project ./src/UselessConsumer --no-build
+      run: dotnet run --project ./src/UselessConsumer/UselessConsumer.csproj --no-build
