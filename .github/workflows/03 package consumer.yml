@@ -14,7 +14,7 @@ jobs:
         dotnet-version: 5.0.100
 
     - name: Add NuGet source
-      run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --name github_dhornyak https://nuget.pkg.github.com/dhornyak/index.json
+      run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github_dhornyak https://nuget.pkg.github.com/dhornyak/index.json
 
     - name: List NuGet sources
       run: dotnet nuget list source
