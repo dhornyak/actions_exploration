@@ -13,7 +13,7 @@ jobs:
       with:
         dotnet-version: 5.0.100
 
-    - name: dotnet info
+    - name: Info
       run: dotnet --info
 
     - name: Add NuGet source
