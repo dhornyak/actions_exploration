@@ -27,16 +27,19 @@ jobs:
       run: dotnet restore ./src/UselessPackage/UselessPackage.csproj
 
     - name: Build
-      run: dotnet build ./src/UselessPackage/UselessPackage.csproj --no-restore
+      run: dotnet build ./src/UselessPackage/UselessPackage.csproj --no-restore --configuration Release
 
     - name: Test
-      run: dotnet test ./test/UselessPackage.Test/UselessPackage.Test.csproj
+      run: dotnet test ./test/UselessPackage.Test/UselessPackage.Test.csproj --configuration Release
+
+    - name: Publish
+      run: dotnet publish ./src/UselessPackage/UselessPackage.csproj --configuration Release --no-build 
 
     - name: Pack
-      run: dotnet pack ./src/UselessPackage/UselessPackage.csproj -p:RepositoryUrl=${{ github.event.repository.html_url }}
+      run: dotnet pack ./src/UselessPackage/UselessPackage.csproj --configuration Release -p:RepositoryUrl=${{ github.event.repository.html_url }}
 
     - name: Push
-      run: dotnet nuget push ./src/UselessPackage/bin/Debug/*.nupkg --source https://nuget.pkg.github.com/dhornyak/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+      run: dotnet nuget push ./src/UselessPackage/bin/Release/*.nupkg --source https://nuget.pkg.github.com/dhornyak/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
 
     - name: Display structure of working directory
       run: ls -R
